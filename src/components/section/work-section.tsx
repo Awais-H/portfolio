@@ -31,6 +31,14 @@ function LogoImage({ src, alt }: { src: string; alt: string }) {
 }
 
 export default function WorkSection() {
+  if (DATA.work.length === 0) {
+    return (
+      <div className="border border-border rounded-xl p-6 text-sm text-muted-foreground">
+        No work experience yet. Add entries in <code>src/data/resume.tsx</code>.
+      </div>
+    );
+  }
+
   return (
     <Accordion type="single" collapsible className="w-full grid gap-6">
       {DATA.work.map((work) => (
