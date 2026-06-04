@@ -20,9 +20,6 @@ export default function ProjectsSection() {
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
               Featured work
             </h2>
-            <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed text-balance text-center">
-              Add your projects in <code>src/data/resume.tsx</code>.
-            </p>
           </div>
         </div>
         {DATA.projects.length > 0 ? (

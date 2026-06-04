@@ -36,8 +36,7 @@ export default function ContactSection() {
             className="text-blue-500 hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
           >
             {DATA.contact.email || "you@example.com"}
-          </Link>{" "}
-          and customize this section to match your preferred contact channels.
+          </Link>
         </p>
       </div>
     </div>

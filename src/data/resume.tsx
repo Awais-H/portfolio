@@ -24,7 +24,7 @@ export const DATA = {
     "Systems Design Engineering student building AI and full-stack products.",
   summary:
     "I build practical software end-to-end, from ML systems to production-ready web apps.",
-  avatarUrl: "",
+  avatarUrl: "/pfp.png",
   skills: [],
   skillCategories: [
     {
