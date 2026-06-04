@@ -25,10 +25,10 @@ export default function ContactSection() {
       </div>
       <div className="relative flex flex-col items-center gap-4 text-center">
         <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-          Get in Touch
+          Found me interesting?
         </h2>
         <p className="mx-auto max-w-lg text-muted-foreground text-balance">
-          Want to connect? Send an email at{" "}
+          You can contact me via email at{" "}
           <Link
             href={emailHref}
             target="_blank"
