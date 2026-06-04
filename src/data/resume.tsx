@@ -282,7 +282,7 @@ export const DATA = {
       location: "Canada",
       description:
         "AI Hospital Management System ranked Top 10 out of 300 teams.",
-      image: "",
+      image: "/logos/genai-genesis.png",
       links: [] as HackathonLink[],
     },
     {
@@ -291,7 +291,7 @@ export const DATA = {
       location: "Canada",
       description:
         "Chess Engine AI project placed in the top 10 of the hackathon.",
-      image: "",
+      image: "/logos/chess-hacks.png",
       links: [] as HackathonLink[],
     },
   ],
