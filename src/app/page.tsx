@@ -38,7 +38,7 @@ export default function Page() {
                 <AvatarImage
                   alt={DATA.name}
                   src={DATA.avatarUrl}
-                  className="object-cover object-[center_20%]"
+                  className="object-cover object-[center_45%]"
                 />
                 <AvatarFallback>{DATA.initials}</AvatarFallback>
               </Avatar>
