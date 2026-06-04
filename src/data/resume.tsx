@@ -1,5 +1,18 @@
 import { Icons } from "@/components/icons";
 import { FolderKanbanIcon, HomeIcon } from "lucide-react";
+import type { ReactNode } from "react";
+
+type ProjectLink = {
+  type: string;
+  href: string;
+  icon: ReactNode;
+};
+
+type HackathonLink = {
+  title: string;
+  href: string;
+  icon: ReactNode;
+};
 
 export const DATA = {
   name: "Awais Hashar",
@@ -207,7 +220,7 @@ export const DATA = {
         "GPT-4o Vision",
         "Twilio",
       ],
-      links: [],
+      links: [] as ProjectLink[],
       image: "",
       video: "",
     },
@@ -226,7 +239,7 @@ export const DATA = {
         "Redis",
         "GPT-4o",
       ],
-      links: [],
+      links: [] as ProjectLink[],
       image: "",
       video: "",
     },
@@ -238,7 +251,7 @@ export const DATA = {
       description:
         "Developed an AI-based chess analysis project focused on move evaluation and game strategy. The project explored model-driven decision making and performance testing against strong baselines.",
       technologies: ["Python", "PyTorch", "CNN", "Monte Carlo Search"],
-      links: [],
+      links: [] as ProjectLink[],
       image: "",
       video: "",
     },
@@ -257,7 +270,7 @@ export const DATA = {
         "Electron",
         "TailwindCSS",
       ],
-      links: [],
+      links: [] as ProjectLink[],
       image: "",
       video: "",
     },
@@ -270,7 +283,7 @@ export const DATA = {
       description:
         "AI Hospital Management System ranked Top 10 out of 300 teams.",
       image: "",
-      links: [],
+      links: [] as HackathonLink[],
     },
     {
       title: "Chess Hacks",
@@ -279,7 +292,7 @@ export const DATA = {
       description:
         "Chess Engine AI project placed in the top 10 of the hackathon.",
       image: "",
-      links: [],
+      links: [] as HackathonLink[],
     },
   ],
 } as const;
