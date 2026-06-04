@@ -221,7 +221,7 @@ export const DATA = {
         "Twilio",
       ],
       links: [] as ProjectLink[],
-      image: "",
+      image: "/projects/ai-hospital-management-system.png",
       video: "",
     },
     {
@@ -240,7 +240,7 @@ export const DATA = {
         "GPT-4o",
       ],
       links: [] as ProjectLink[],
-      image: "",
+      image: "/projects/stash.png",
       video: "",
     },
     {
@@ -252,7 +252,7 @@ export const DATA = {
         "Developed an AI-based chess analysis project focused on move evaluation and game strategy. The project explored model-driven decision making and performance testing against strong baselines.",
       technologies: ["Python", "PyTorch", "CNN", "Monte Carlo Search"],
       links: [] as ProjectLink[],
-      image: "",
+      image: "/projects/chess-engine-ai.png",
       video: "",
     },
     {
@@ -271,7 +271,7 @@ export const DATA = {
         "TailwindCSS",
       ],
       links: [] as ProjectLink[],
-      image: "",
+      image: "/projects/safe-sound.png",
       video: "",
     },
   ],
