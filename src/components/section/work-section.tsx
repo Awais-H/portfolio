@@ -11,6 +11,18 @@ import { DATA } from "@/data/resume";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+type WorkItem = {
+  company: string;
+  href: string;
+  badges: readonly string[];
+  location: string;
+  title: string;
+  logoUrl: string;
+  start: string;
+  end?: string;
+  description: string;
+};
+
 function LogoImage({
   src,
   alt,
@@ -42,7 +54,9 @@ function LogoImage({
 }
 
 export default function WorkSection() {
-  if (DATA.work.length === 0) {
+  const workItems = DATA.work as readonly WorkItem[];
+
+  if (workItems.length === 0) {
     return (
       <div className="border border-border rounded-xl p-6 text-sm text-muted-foreground">
         No work experience yet. Add entries in <code>src/data/resume.tsx</code>.
@@ -50,7 +64,7 @@ export default function WorkSection() {
     );
   }
 
-  const defaultOpenItems = DATA.work.map((work) => work.company);
+  const defaultOpenItems = workItems.map((work) => work.company);
 
   return (
     <Accordion
@@ -58,7 +72,7 @@ export default function WorkSection() {
       defaultValue={defaultOpenItems}
       className="w-full grid gap-6"
     >
-      {DATA.work.map((work) => (
+      {workItems.map((work) => (
         <AccordionItem
           key={work.company}
           value={work.company}
