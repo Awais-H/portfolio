@@ -4,8 +4,14 @@ import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { DATA } from "@/data/resume";
 
+type SkillCategory = {
+  id: string;
+  label: string;
+  skills: readonly string[];
+};
+
 export default function SkillsSection() {
-  const categories = DATA.skillCategories;
+  const categories = DATA.skillCategories as readonly SkillCategory[];
   const defaultCategoryId = categories[0]?.id ?? "";
   const [activeCategoryId, setActiveCategoryId] = useState(defaultCategoryId);
 
