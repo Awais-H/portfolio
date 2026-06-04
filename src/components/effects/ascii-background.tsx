@@ -13,9 +13,13 @@ const MUTATION_RATIO = 0.07;
 // Follow / shape easing for the embedded light.
 const FOLLOW_EASE = 0.16;
 const INTENSITY_EASE = 0.08;
-const STRETCH_EASE = 0.12;
 const MOVING_SPEED = 0.6;
 const RADIUS_RATIO = 0.14;
+// The light is drawn along a trail of recent positions so it bends with the
+// cursor path (curls when moving in circles) instead of being a straight blob.
+const TRAIL_POINTS = 20;
+const HALF_HEAD_RATIO = 0.55; // half-width at the head (× radius)
+const HALF_TAIL_RATIO = 0.13; // half-width at the tail (× radius)
 
 type Palette = {
   low: [number, number, number];
@@ -64,12 +68,10 @@ export default function AsciiBackground({ className }: { className?: string }) {
     // Light state (cursor-driven), shared with the brightness function.
     const target = { x: 0, y: 0 };
     const head = { x: 0, y: 0 };
+    const trail: { x: number; y: number }[] = [];
     let intensity = 0; // fades to 0 when the cursor is still
-    let curStretch = 0;
-    let curAngle = 0;
-    let lightAngle = 0;
-    let scaleX = 1;
-    let scaleY = 1;
+    let halfHead = 0;
+    let halfTail = 0;
 
     let prevLit = new Map<number, number>();
 
@@ -91,17 +93,49 @@ export default function AsciiBackground({ className }: { className?: string }) {
       ctx.fillText(chars[index], x, y);
     };
 
-    // Elliptical falloff around the light, oriented along its motion.
+    // Tapered ribbon along the trail polyline: wide/bright at the head, thin
+    // and dim toward the tail. Following the path lets it curve with the cursor.
     const brightnessAt = (px: number, py: number) => {
-      const dx = px - head.x;
-      const dy = py - head.y;
-      const cos = Math.cos(lightAngle);
-      const sin = Math.sin(lightAngle);
-      const localX = (dx * cos + dy * sin) / scaleX;
-      const localY = (-dx * sin + dy * cos) / scaleY;
-      const d = Math.sqrt(localX * localX + localY * localY) / radius;
-      if (d >= 1) return 0;
-      const b = 1 - d;
+      const n = trail.length;
+      if (n === 0) return 0;
+
+      let best = 0;
+      const segments = n - 1;
+
+      if (segments <= 0) {
+        const dx = px - trail[0].x;
+        const dy = py - trail[0].y;
+        const dist = Math.hypot(dx, dy);
+        best = halfHead > 0 ? 1 - dist / halfHead : 0;
+      } else {
+        for (let i = 0; i < segments; i++) {
+          const a = trail[i];
+          const b = trail[i + 1];
+          const abx = b.x - a.x;
+          const aby = b.y - a.y;
+          const apx = px - a.x;
+          const apy = py - a.y;
+          const len2 = abx * abx + aby * aby;
+          let t = len2 > 0 ? (apx * abx + apy * aby) / len2 : 0;
+          if (t < 0) t = 0;
+          else if (t > 1) t = 1;
+
+          const cx = a.x + abx * t;
+          const cy = a.y + aby * t;
+          const dist = Math.hypot(px - cx, py - cy);
+
+          const s = (i + t) / segments; // 0 = tail, 1 = head
+          const halfWidth = halfTail + (halfHead - halfTail) * s;
+          const perp = 1 - dist / halfWidth;
+          if (perp > 0) {
+            const contrib = perp * (0.3 + 0.7 * s);
+            if (contrib > best) best = contrib;
+          }
+        }
+      }
+
+      if (best <= 0) return 0;
+      const b = Math.min(1, best);
       return b * b * (3 - 2 * b);
     };
 
@@ -129,12 +163,15 @@ export default function AsciiBackground({ className }: { className?: string }) {
       cols = Math.ceil(width / CHAR_WIDTH);
       rows = Math.ceil(height / FONT_SIZE);
       radius = Math.min(width, height) * RADIUS_RATIO;
+      halfHead = radius * HALF_HEAD_RATIO;
+      halfTail = radius * HALF_TAIL_RATIO;
       chars = Array.from({ length: cols * rows }, randomChar);
 
       target.x = width / 2;
       target.y = height * 0.32;
       head.x = target.x;
       head.y = target.y;
+      trail.length = 0;
 
       prevLit = new Map();
       drawAll();
@@ -181,14 +218,11 @@ export default function AsciiBackground({ className }: { className?: string }) {
       const speed = Math.hypot(vx, vy);
       const moving = speed > MOVING_SPEED;
 
-      if (moving) curAngle = Math.atan2(vy, vx);
-      const targetStretch = Math.min(speed * 0.01, 1.5);
-      curStretch += (targetStretch - curStretch) * STRETCH_EASE;
       intensity += ((moving ? 1 : 0) - intensity) * INTENSITY_EASE;
 
-      scaleX = 1 + curStretch;
-      scaleY = 1 / Math.sqrt(1 + curStretch);
-      lightAngle = curAngle;
+      // Record the path so the light bends along the cursor's recent motion.
+      trail.push({ x: head.x, y: head.y });
+      while (trail.length > TRAIL_POINTS) trail.shift();
 
       // Fully faded and nothing left lit: skip the scan entirely.
       if (intensity < 0.004 && prevLit.size === 0) {
@@ -196,12 +230,23 @@ export default function AsciiBackground({ className }: { className?: string }) {
         return;
       }
 
-      // Cells inside the light's bounding box get their brightness refreshed.
-      const reach = radius * Math.max(scaleX, scaleY) * 1.08;
-      const minCol = Math.max(0, Math.floor((head.x - reach) / CHAR_WIDTH));
-      const maxCol = Math.min(cols - 1, Math.ceil((head.x + reach) / CHAR_WIDTH));
-      const minRow = Math.max(0, Math.floor((head.y - reach) / FONT_SIZE));
-      const maxRow = Math.min(rows - 1, Math.ceil((head.y + reach) / FONT_SIZE));
+      // Bounding box around the whole trail, padded by the widest half-width.
+      let tMinX = Infinity;
+      let tMinY = Infinity;
+      let tMaxX = -Infinity;
+      let tMaxY = -Infinity;
+      for (let i = 0; i < trail.length; i++) {
+        const p = trail[i];
+        if (p.x < tMinX) tMinX = p.x;
+        if (p.x > tMaxX) tMaxX = p.x;
+        if (p.y < tMinY) tMinY = p.y;
+        if (p.y > tMaxY) tMaxY = p.y;
+      }
+      const pad = halfHead * 1.15;
+      const minCol = Math.max(0, Math.floor((tMinX - pad) / CHAR_WIDTH));
+      const maxCol = Math.min(cols - 1, Math.ceil((tMaxX + pad) / CHAR_WIDTH));
+      const minRow = Math.max(0, Math.floor((tMinY - pad) / FONT_SIZE));
+      const maxRow = Math.min(rows - 1, Math.ceil((tMaxY + pad) / FONT_SIZE));
 
       const nextLit = new Map<number, number>();
       for (let row = minRow; row <= maxRow; row++) {
