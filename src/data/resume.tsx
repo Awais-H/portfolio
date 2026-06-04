@@ -150,7 +150,7 @@ export const DATA = {
       },
       LinkedIn: {
         name: "LinkedIn",
-        url: "https://linkedin.com/in/awaishashar",
+        url: "https://www.linkedin.com/in/awais-hashar/",
         icon: Icons.linkedin,
         navbar: true,
       },
@@ -207,7 +207,7 @@ export const DATA = {
   projects: [
     {
       title: "AI Hospital Management System",
-      href: "https://github.com/Awais-H",
+      href: "https://github.com/Dhanika-Botejue/GenAI-Genesis-2026",
       dates: "2026",
       active: true,
       description:
@@ -226,7 +226,7 @@ export const DATA = {
     },
     {
       title: "Stash",
-      href: "https://github.com/Awais-H",
+      href: "https://github.com/FluentFlier/stash",
       dates: "2026",
       active: true,
       description:
@@ -245,7 +245,7 @@ export const DATA = {
     },
     {
       title: "Chess Engine AI",
-      href: "https://github.com/Awais-H",
+      href: "https://github.com/Awais-H/Chess-Hacks",
       dates: "2026",
       active: true,
       description:
@@ -257,7 +257,7 @@ export const DATA = {
     },
     {
       title: "Safe Sound",
-      href: "https://github.com/Awais-H",
+      href: "https://github.com/Awais-H/Safe-Sound",
       dates: "2026",
       active: true,
       description:
