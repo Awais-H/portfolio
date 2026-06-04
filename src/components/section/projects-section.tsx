@@ -1,4 +1,4 @@
-import BlurFade from "@/components/magicui/blur-fade";
+import BlurFade from "@/components/effects/blur-fade";
 import { ProjectCard } from "@/components/project-card";
 import { DATA } from "@/data/resume";
 

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import BlurFade from "@/components/magicui/blur-fade";
-import BlurFadeText from "@/components/magicui/blur-fade-text";
+import BlurFade from "@/components/effects/blur-fade";
+import BlurFadeText from "@/components/effects/blur-fade-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DATA } from "@/data/resume";
 import Link from "next/link";
@@ -8,6 +8,7 @@ import Markdown from "react-markdown";
 import ContactSection from "@/components/section/contact-section";
 import HackathonsSection from "@/components/section/hackathons-section";
 import ProjectsSection from "@/components/section/projects-section";
+import SkillsSection from "@/components/section/skills-section";
 import WorkSection from "@/components/section/work-section";
 import { ArrowUpRight } from "lucide-react";
 
@@ -124,22 +125,9 @@ export default function Page() {
           <BlurFade delay={BLUR_FADE_DELAY * 9}>
             <h2 className="text-xl font-bold">Skills</h2>
           </BlurFade>
-          {DATA.skills.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {DATA.skills.map((skill, id) => (
-                <BlurFade key={skill.name} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
-                  <div className="border bg-background border-border ring-2 ring-border/20 rounded-xl h-8 w-fit px-4 flex items-center gap-2">
-                    {skill.icon && <skill.icon className="size-4 rounded overflow-hidden object-contain" />}
-                    <span className="text-foreground text-sm font-medium">{skill.name}</span>
-                  </div>
-                </BlurFade>
-              ))}
-            </div>
-          ) : (
-            <div className="border border-border rounded-xl p-6 text-sm text-muted-foreground">
-              No skills listed yet. Add them in <code>src/data/resume.tsx</code>.
-            </div>
-          )}
+          <BlurFade delay={BLUR_FADE_DELAY * 10}>
+            <SkillsSection />
+          </BlurFade>
         </div>
       </section>
       <section id="projects">

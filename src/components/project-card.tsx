@@ -3,7 +3,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Globe } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import Markdown from "react-markdown";
@@ -83,9 +83,25 @@ export function ProjectCard({
             <div className="w-full h-48 bg-muted" />
           )}
         </Link>
-        {links && links.length > 0 && (
+        {(href || (links && links.length > 0)) && (
           <div className="absolute top-2 right-2 flex flex-wrap gap-2">
-            {links.map((link, idx) => (
+            {href && (
+              <Link
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Badge
+                  className="flex items-center gap-1.5 text-xs bg-black text-white hover:bg-black/90"
+                  variant="default"
+                >
+                  <Globe className="size-3" />
+                  Project
+                </Badge>
+              </Link>
+            )}
+            {links?.map((link, idx) => (
               <Link
                 href={link.href}
                 key={idx}

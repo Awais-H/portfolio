@@ -1,4 +1,4 @@
-import BlurFade from "@/components/magicui/blur-fade";
+import BlurFade from "@/components/effects/blur-fade";
 import { allPosts } from "content-collections";
 import Link from "next/link";
 import type { Metadata } from "next";
