@@ -38,6 +38,17 @@ const randomChar = () => CHARSET[Math.floor(Math.random() * CHARSET.length)];
 export default function AsciiBackground({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { resolvedTheme } = useTheme();
+  const activeRef = useRef(true);
+  const startLoopRef = useRef<(() => void) | null>(null);
+  const stopLoopRef = useRef<(() => void) | null>(null);
+
+  const isDark = resolvedTheme !== "light";
+
+  useEffect(() => {
+    activeRef.current = isDark;
+    if (isDark) startLoopRef.current?.();
+    else stopLoopRef.current?.();
+  }, [isDark]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -46,16 +57,7 @@ export default function AsciiBackground({ className }: { className?: string }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const mode = resolvedTheme === "dark" ? "dark" : "light";
-
-    // ASCII background is dark-mode only; clear and bail out in light mode.
-    if (mode !== "dark") {
-      canvas.width = 0;
-      canvas.height = 0;
-      return;
-    }
-
-    const { low, high, baseAlpha, peakAlpha } = palette[mode];
+    const { low, high, baseAlpha, peakAlpha } = palette.dark;
 
     let dpr = 1;
     let width = 0;
@@ -74,6 +76,8 @@ export default function AsciiBackground({ className }: { className?: string }) {
     let halfTail = 0;
 
     let prevLit = new Map<number, number>();
+    let rafId = 0;
+    let running = false;
 
     const cellColor = (b: number) => {
       const r = Math.round(low[0] + (high[0] - low[0]) * b);
@@ -195,6 +199,8 @@ export default function AsciiBackground({ className }: { className?: string }) {
 
     // Cycle a fraction of characters; redraw them with their current brightness.
     const mutationInterval = window.setInterval(() => {
+      if (!activeRef.current) return;
+
       const mutations = Math.floor(chars.length * MUTATION_RATIO);
       for (let i = 0; i < mutations; i++) {
         const index = Math.floor(Math.random() * chars.length);
@@ -208,8 +214,9 @@ export default function AsciiBackground({ className }: { className?: string }) {
       }
     }, 100);
 
-    let rafId = 0;
     const render = () => {
+      if (!running) return;
+
       const vx = target.x - head.x;
       const vy = target.y - head.y;
       head.x += vx * FOLLOW_EASE;
@@ -268,22 +275,43 @@ export default function AsciiBackground({ className }: { className?: string }) {
       rafId = requestAnimationFrame(render);
     };
 
-    rafId = requestAnimationFrame(render);
+    const startLoop = () => {
+      if (running) return;
+      running = true;
+      rafId = requestAnimationFrame(render);
+    };
+
+    const stopLoop = () => {
+      running = false;
+      cancelAnimationFrame(rafId);
+    };
+
+    startLoopRef.current = startLoop;
+    stopLoopRef.current = stopLoop;
+
+    if (activeRef.current) startLoop();
+    else stopLoop();
 
     return () => {
-      cancelAnimationFrame(rafId);
+      stopLoop();
+      startLoopRef.current = null;
+      stopLoopRef.current = null;
       window.clearInterval(mutationInterval);
       window.clearTimeout(resizeTimer);
       window.removeEventListener("mousemove", handleMove);
       window.removeEventListener("resize", handleResize);
     };
-  }, [resolvedTheme]);
+  }, []);
 
   return (
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className={cn("pointer-events-none h-full w-full", className)}
+      className={cn(
+        "pointer-events-none h-full w-full",
+        !isDark && "invisible",
+        className
+      )}
     />
   );
 }
