@@ -200,8 +200,6 @@ export const DATA = {
       href: "https://uwaterloo.ca/",
       degree: "Bachelor of Applied Science in Systems Design Engineering",
       logoUrl: "/logos/waterloo.png",
-      start: "Sept 2025",
-      end: "Present",
       activities: [
         {
           organization: "Waterloo Aerial Robotics Group",
@@ -211,11 +209,8 @@ export const DATA = {
           logoUrl: "/logos/warg.png",
           start: "Sept 2025",
           end: "Dec 2025",
-          highlights: [
-            "Increased obstacle detection accuracy by 10% using Ultralytics YOLOv11 during autonomous test flights.",
-            "Collaborated with team members to optimize image pipelines with OpenCV, processing 5K+ frames per flight and reducing data transfer overhead by 10%.",
-            "Reduced connection latency by 20% by optimizing MAVLink communication with a single instance in Python.",
-          ],
+          description:
+            "YOLOv11 obstacle detection, OpenCV pipelines and MAVLink communication",
         },
       ],
     },
