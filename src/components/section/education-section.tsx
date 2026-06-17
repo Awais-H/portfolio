@@ -25,6 +25,8 @@ type EducationEntry = {
   activities?: readonly EducationActivity[];
 };
 
+const TIMELINE_LINE = "bg-muted-foreground/40";
+
 function LogoImage({
   src,
   alt,
@@ -57,10 +59,19 @@ function LogoImage({
 
 function ActivityRow({ activity }: { activity: EducationActivity }) {
   return (
-    <div className="flex items-start justify-between gap-x-3 w-full">
+    <div className="flex items-start justify-between gap-x-3 w-full min-w-0">
       <div className="flex items-start gap-x-3 flex-1 min-w-0">
-        <LogoImage src={activity.logoUrl} alt={activity.organization} />
-        <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+        <div className="relative w-8 md:w-10 shrink-0 flex items-center justify-center">
+          <div
+            className={cn(
+              "absolute left-3.5 md:left-4 top-1/2 -translate-y-1/2 h-0.5 w-3",
+              TIMELINE_LINE
+            )}
+            aria-hidden
+          />
+          <LogoImage src={activity.logoUrl} alt={activity.organization} />
+        </div>
+        <div className="flex-1 min-w-0 flex flex-col gap-0.5 pt-0.5">
           <div className="font-semibold leading-none">
             {activity.href ? (
               <Link
@@ -108,55 +119,50 @@ export default function EducationSection() {
 
   return (
     <div className="flex flex-col gap-8">
-      {educationEntries.map((education) => (
-        <div key={education.school} className="flex flex-col">
-          <Link
-            href={education.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-x-3 group"
-          >
-            <LogoImage src={education.logoUrl} alt={education.school} />
-            <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-              <div className="font-semibold leading-none flex items-center gap-2">
-                {education.school}
-                <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" aria-hidden />
-              </div>
-              <div className="font-sans text-sm text-muted-foreground">
-                {education.degree}
-              </div>
-            </div>
-          </Link>
+      {educationEntries.map((education) => {
+        const hasActivities =
+          education.activities && education.activities.length > 0;
 
-          {education.activities && education.activities.length > 0 ? (
-            <div className="flex -mt-1">
+        return (
+          <div key={education.school} className="relative flex flex-col">
+            {hasActivities ? (
               <div
-                className="w-8 md:w-10 shrink-0 flex justify-center -mt-2"
+                className={cn(
+                  "pointer-events-none absolute left-3.5 md:left-4 top-8 md:top-10 bottom-4 w-0.5",
+                  TIMELINE_LINE
+                )}
                 aria-hidden
-              >
-                <div className="w-px bg-border self-stretch min-h-full" />
+              />
+            ) : null}
+
+            <Link
+              href={education.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start gap-x-3 group"
+            >
+              <LogoImage src={education.logoUrl} alt={education.school} />
+              <div className="flex-1 min-w-0 flex flex-col gap-0.5 pt-0.5">
+                <div className="font-semibold leading-none flex items-center gap-2">
+                  {education.school}
+                  <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" aria-hidden />
+                </div>
+                <div className="font-sans text-sm text-muted-foreground">
+                  {education.degree}
+                </div>
               </div>
-              <div className="flex-1 flex flex-col gap-6 pl-4 md:pl-6 pt-2">
-                {education.activities.map((activity, index) => (
-                  <div
-                    key={activity.organization}
-                    className={cn(
-                      "relative",
-                      index < education.activities!.length - 1 && "pb-0"
-                    )}
-                  >
-                    <div
-                      className="absolute -left-4 md:-left-6 top-4 md:top-5 w-4 md:w-6 h-px bg-border"
-                      aria-hidden
-                    />
-                    <ActivityRow activity={activity} />
-                  </div>
+            </Link>
+
+            {hasActivities ? (
+              <div className="flex flex-col gap-6 mt-6">
+                {education.activities!.map((activity) => (
+                  <ActivityRow key={activity.organization} activity={activity} />
                 ))}
               </div>
-            </div>
-          ) : null}
-        </div>
-      ))}
+            ) : null}
+          </div>
+        );
+      })}
     </div>
   );
 }
