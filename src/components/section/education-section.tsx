@@ -26,6 +26,10 @@ type EducationEntry = {
 };
 
 const TIMELINE_LINE = "bg-muted-foreground/40";
+/** 3/4 of the original pl-4/pl-6 + timeline-column offset (48px / 64px → 36px / 48px) */
+const ACTIVITY_INDENT = "ml-9 md:ml-12";
+/** Horizontal branch width: indent minus vertical line offset */
+const BRANCH_WIDTH = "w-[1.375rem] md:w-8";
 
 function LogoImage({
   src,
@@ -59,20 +63,21 @@ function LogoImage({
 
 function ActivityRow({ activity }: { activity: EducationActivity }) {
   return (
-    <div className="flex items-start justify-between gap-x-3 w-full min-w-0">
-      <div className="flex items-start gap-x-3 flex-1 min-w-0">
-        <div className="relative w-8 md:w-10 shrink-0 flex items-center justify-center">
-          <div
-            className={cn(
-              "absolute left-3.5 md:left-4 top-1/2 -translate-y-1/2 h-0.5 w-3",
-              TIMELINE_LINE
-            )}
-            aria-hidden
-          />
-          <LogoImage src={activity.logoUrl} alt={activity.organization} />
-        </div>
-        <div className="flex-1 min-w-0 flex flex-col gap-0.5 pt-0.5">
-          <div className="font-semibold leading-none">
+    <div className="flex items-start gap-x-3 w-full min-w-0">
+      <div className="relative w-8 md:w-10 shrink-0 flex items-center justify-center">
+        <div
+          className={cn(
+            "absolute right-full top-1/2 -translate-y-1/2 h-0.5",
+            BRANCH_WIDTH,
+            TIMELINE_LINE
+          )}
+          aria-hidden
+        />
+        <LogoImage src={activity.logoUrl} alt={activity.organization} />
+      </div>
+      <div className="flex-1 min-w-0 flex flex-col gap-0.5 pt-0.5">
+        <div className="flex items-start justify-between gap-x-3">
+          <div className="font-semibold leading-none min-w-0">
             {activity.href ? (
               <Link
                 href={activity.href}
@@ -87,20 +92,20 @@ function ActivityRow({ activity }: { activity: EducationActivity }) {
               activity.organization
             )}
           </div>
-          <div className="font-sans text-sm text-muted-foreground">
-            {activity.title}
+          <div className="flex items-center gap-1 text-xs tabular-nums text-muted-foreground text-right flex-none">
+            <span>
+              {activity.start} - {activity.end ?? "Present"}
+            </span>
           </div>
-          {activity.description ? (
-            <p className="text-sm text-muted-foreground leading-relaxed pt-0.5">
-              {activity.description}
-            </p>
-          ) : null}
         </div>
-      </div>
-      <div className="flex items-center gap-1 text-xs tabular-nums text-muted-foreground text-right flex-none pt-0.5">
-        <span>
-          {activity.start} - {activity.end ?? "Present"}
-        </span>
+        <div className="font-sans text-sm text-muted-foreground">
+          {activity.title}
+        </div>
+        {activity.description ? (
+          <p className="text-sm text-muted-foreground whitespace-nowrap pt-0.5">
+            {activity.description}
+          </p>
+        ) : null}
       </div>
     </div>
   );
@@ -154,7 +159,7 @@ export default function EducationSection() {
             </Link>
 
             {hasActivities ? (
-              <div className="flex flex-col gap-6 mt-6">
+              <div className={cn("flex flex-col gap-6 mt-6", ACTIVITY_INDENT)}>
                 {education.activities!.map((activity) => (
                   <ActivityRow key={activity.organization} activity={activity} />
                 ))}
