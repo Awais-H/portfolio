@@ -217,6 +217,18 @@ export const DATA = {
   ],
   projects: [
     {
+      title: "Usage Widget",
+      href: "https://github.com/Awais-H/Usage-Widget",
+      dates: "2026",
+      active: true,
+      description:
+        "Built an iOS home screen widget that tracks Claude Code and Codex usage limits at a glance. Shows 5-hour and weekly progress bars with reset times, plus a companion app for importing auth tokens from a Mac.",
+      technologies: ["Swift", "SwiftUI", "WidgetKit", "iOS", "Xcode"],
+      links: [] as ProjectLink[],
+      image: "/projects/usage-widget.png",
+      video: "",
+    },
+    {
       title: "AI Hospital Management System",
       href: "https://github.com/Dhanika-Botejue/GenAI-Genesis-2026",
       dates: "2026",
@@ -255,18 +267,6 @@ export const DATA = {
       video: "",
     },
     {
-      title: "Chess Engine AI",
-      href: "https://github.com/Awais-H/Chess-Hacks",
-      dates: "2026",
-      active: true,
-      description:
-        "Developed an AI-based chess analysis project focused on move evaluation and game strategy. The project explored model-driven decision making and performance testing against strong baselines.",
-      technologies: ["Python", "PyTorch", "CNN", "Monte Carlo Search"],
-      links: [] as ProjectLink[],
-      image: "/projects/chess-engine-ai.png",
-      video: "",
-    },
-    {
       title: "Safe Sound",
       href: "https://github.com/Awais-H/Safe-Sound",
       dates: "2026",
@@ -294,15 +294,6 @@ export const DATA = {
       description:
         "AI Hospital Management System ranked Top 10 out of 300 teams.",
       image: "/logos/genai-genesis.png",
-      links: [] as HackathonLink[],
-    },
-    {
-      title: "Chess Hacks",
-      dates: "2026",
-      location: "Canada",
-      description:
-        "Chess Engine AI project placed in the top 10 of the hackathon.",
-      image: "/logos/chess-hacks.png",
       links: [] as HackathonLink[],
     },
   ],
