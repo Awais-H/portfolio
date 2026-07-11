@@ -217,6 +217,43 @@ export const DATA = {
   ],
   projects: [
     {
+      title: "AI Image Canvas",
+      href: "https://github.com/Awais-H/AI-Image-Canvas",
+      dates: "2026",
+      active: true,
+      description:
+        "Built an interactive visual board for iterative AI image editing. Users paste images, draw annotations, and add text notes on a canvas, then a Codex plugin and MCP server parse those marks into edit instructions and place generated results back on the board.",
+      technologies: [
+        "TypeScript",
+        "React",
+        "MCP",
+        "Node.js",
+        "Codex Plugin",
+      ],
+      links: [] as ProjectLink[],
+      image: "/projects/ai-image-canvas.png",
+      video: "",
+    },
+    {
+      title: "Halo",
+      href: "https://github.com/Awais-H/Halo",
+      dates: "2026",
+      active: true,
+      description:
+        "Built a healthcare operations platform that combines outbound patient calling, doctor workflows, and a nurse-facing 3D hospital digital twin. Teams can explore floor plans, inspect patient rooms, and run structured phone check-ins from one integrated stack.",
+      technologies: [
+        "Three.js",
+        "Next.js",
+        "FastAPI",
+        "MongoDB",
+        "Twilio",
+        "Gemini",
+      ],
+      links: [] as ProjectLink[],
+      image: "/projects/ai-hospital-management-system.png",
+      video: "",
+    },
+    {
       title: "Usage Widget",
       href: "https://github.com/Awais-H/Usage-Widget",
       dates: "2026",
@@ -229,27 +266,8 @@ export const DATA = {
       video: "",
     },
     {
-      title: "AI Hospital Management System",
-      href: "https://github.com/Dhanika-Botejue/GenAI-Genesis-2026",
-      dates: "2026",
-      active: true,
-      description:
-        "Built a healthcare-focused platform that combines interactive 3D visualization with operational data workflows. The system supports day-to-day management tasks and real-time updates across a hospital-style environment.",
-      technologies: [
-        "Three.js",
-        "React",
-        "FastAPI",
-        "MongoDB",
-        "GPT-4o Vision",
-        "Twilio",
-      ],
-      links: [] as ProjectLink[],
-      image: "/projects/ai-hospital-management-system.png",
-      video: "",
-    },
-    {
       title: "Stash",
-      href: "https://github.com/FluentFlier/stash",
+      href: "https://github.com/Awais-H/Stash",
       dates: "2026",
       active: true,
       description:

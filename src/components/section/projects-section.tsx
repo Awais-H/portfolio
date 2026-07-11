@@ -1,6 +1,7 @@
 import BlurFade from "@/components/effects/blur-fade";
 import { ProjectCard } from "@/components/project-card";
 import { DATA } from "@/data/resume";
+import { cn } from "@/lib/utils";
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -28,7 +29,12 @@ export default function ProjectsSection() {
               <BlurFade
                 key={project.title}
                 delay={BLUR_FADE_DELAY * 12 + id * 0.05}
-                className="h-full"
+                className={cn(
+                  "h-full",
+                  id === DATA.projects.length - 1 &&
+                    DATA.projects.length % 2 === 1 &&
+                    "sm:col-span-2 sm:max-w-[calc(50%-0.375rem)] sm:justify-self-center"
+                )}
               >
                 <ProjectCard
                   href={project.href}
