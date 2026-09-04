@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import BlurFade from "@/components/effects/blur-fade";
 import BlurFadeText from "@/components/effects/blur-fade-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
