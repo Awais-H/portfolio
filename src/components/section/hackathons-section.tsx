@@ -6,7 +6,7 @@ import { Timeline, TimelineItem, TimelineConnectItem } from "@/components/timeli
 
 export default function HackathonsSection() {
   return (
-    <section id="hackathons" className="overflow-hidden">
+    <div className="overflow-hidden">
       <div className="flex min-h-0 flex-col gap-y-8 w-full">
         <div className="flex flex-col gap-y-4 items-center justify-center">
           <div className="flex items-center w-full">
@@ -77,6 +77,6 @@ export default function HackathonsSection() {
           </div>
         )}
       </div>
-    </section>
+    </div>
   );
 }
