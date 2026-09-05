@@ -1,6 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
-import { useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -9,6 +7,7 @@ import {
 } from "@/components/ui/accordion";
 import { DATA } from "@/data/resume";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { LogoImage } from "@/components/logo-image";
 import { cn } from "@/lib/utils";
 
 type WorkItem = {
@@ -22,36 +21,6 @@ type WorkItem = {
   end?: string;
   description: string;
 };
-
-function LogoImage({
-  src,
-  alt,
-  className,
-}: {
-  src: string;
-  alt: string;
-  className?: string;
-}) {
-  const [imageError, setImageError] = useState(false);
-
-  if (!src || imageError) {
-    return (
-      <div className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border bg-muted flex-none" />
-    );
-  }
-
-  return (
-    <img
-      src={src}
-      alt={alt}
-      className={cn(
-        "size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none",
-        className
-      )}
-      onError={() => setImageError(true)}
-    />
-  );
-}
 
 export default function WorkSection() {
   const workItems = DATA.work as readonly WorkItem[];

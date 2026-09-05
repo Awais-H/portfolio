@@ -1,9 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
-"use client";
-import { useState } from "react";
 import { DATA } from "@/data/resume";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { LogoImage } from "@/components/logo-image";
 import { cn } from "@/lib/utils";
 
 type EducationActivity = {
@@ -31,36 +29,6 @@ const ACTIVITY_INDENT = "ml-9 md:ml-12";
 /** Horizontal branch width: indent minus vertical line offset */
 const BRANCH_WIDTH = "w-[1.375rem] md:w-8";
 
-function LogoImage({
-  src,
-  alt,
-  className,
-}: {
-  src: string;
-  alt: string;
-  className?: string;
-}) {
-  const [imageError, setImageError] = useState(false);
-
-  if (!src || imageError) {
-    return (
-      <div className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border bg-muted flex-none" />
-    );
-  }
-
-  return (
-    <img
-      src={src}
-      alt={alt}
-      className={cn(
-        "size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none bg-card",
-        className
-      )}
-      onError={() => setImageError(true)}
-    />
-  );
-}
-
 function ActivityRow({ activity }: { activity: EducationActivity }) {
   return (
     <div className="flex items-start gap-x-3 w-full min-w-0">
@@ -73,7 +41,11 @@ function ActivityRow({ activity }: { activity: EducationActivity }) {
           )}
           aria-hidden
         />
-        <LogoImage src={activity.logoUrl} alt={activity.organization} />
+        <LogoImage
+          src={activity.logoUrl}
+          alt={activity.organization}
+          className="bg-card"
+        />
       </div>
       <div className="flex-1 min-w-0 flex flex-col gap-0.5 pt-0.5">
         <div className="flex items-start justify-between gap-x-3">
@@ -146,7 +118,11 @@ export default function EducationSection() {
               rel="noopener noreferrer"
               className="flex items-start gap-x-3 group"
             >
-              <LogoImage src={education.logoUrl} alt={education.school} />
+              <LogoImage
+                src={education.logoUrl}
+                alt={education.school}
+                className="bg-card"
+              />
               <div className="flex-1 min-w-0 flex flex-col gap-0.5 pt-0.5">
                 <div className="font-semibold leading-none flex items-center gap-2">
                   {education.school}
