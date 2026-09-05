@@ -12,9 +12,29 @@ import WorkSection from "@/components/section/work-section";
 
 const BLUR_FADE_DELAY = 0.04;
 
+// Structured data so search engines can tie the site to its owner and profiles
+const personJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: DATA.name,
+  url: DATA.url,
+  image: new URL(DATA.avatarUrl, DATA.url).toString(),
+  description: DATA.description,
+  sameAs: Object.values(DATA.contact.social).map((social) => social.url),
+  alumniOf: DATA.education.map((education) => ({
+    "@type": "CollegeOrUniversity",
+    name: education.school,
+    url: education.href,
+  })),
+}).replace(/</g, "\\u003c");
+
 export default function Page() {
   return (
     <main className="min-h-dvh flex flex-col gap-14 relative">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: personJsonLd }}
+      />
       <section id="hero">
         <div className="mx-auto w-full max-w-2xl space-y-8">
           <div className="gap-2 gap-y-6 flex flex-col md:flex-row justify-between">
