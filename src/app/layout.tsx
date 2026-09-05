@@ -77,12 +77,22 @@ export default function RootLayout({
           geistMono.variable
         )}
       >
+        <a
+          href="#content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:outline-none focus:ring-2 focus:ring-ring"
+        >
+          Skip to content
+        </a>
         <ThemeProvider>
           <TooltipProvider delayDuration={0}>
             <div className="fixed inset-0 -z-10 pointer-events-none">
               <AsciiBackground />
             </div>
-            <div className="relative z-10 max-w-2xl mx-auto py-12 pb-24 sm:py-24 px-6">
+            <div
+              id="content"
+              tabIndex={-1}
+              className="relative z-10 max-w-2xl mx-auto py-12 pb-24 sm:py-24 px-6 outline-none"
+            >
               {children}
             </div>
             <Navbar />
