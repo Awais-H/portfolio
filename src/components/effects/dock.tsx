@@ -48,8 +48,13 @@ const Dock = ({
   return (
     <DockContext.Provider value={{ mouseX, magnification, distance }}>
       <motion.div
-        onMouseMove={(e) => mouseX.set(e.pageX)}
-        onMouseLeave={() => mouseX.set(Infinity)}
+        // Only magnify for a real mouse: taps on touch screens fire mouse
+        // events too and would leave an icon stuck enlarged. clientX matches
+        // the viewport coords that getBoundingClientRect returns below.
+        onPointerMove={(e) => {
+          if (e.pointerType === "mouse") mouseX.set(e.clientX);
+        }}
+        onPointerLeave={() => mouseX.set(Infinity)}
         className={cn(
           "mx-auto w-max h-full flex items-end justify-center overflow-visible rounded-full border",
           className
