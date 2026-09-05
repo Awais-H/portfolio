@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AsciiBackground from "@/components/effects/ascii-background";
+import { MotionProvider } from "@/components/motion-provider";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -93,7 +94,7 @@ export default function RootLayout({
               tabIndex={-1}
               className="relative z-10 max-w-2xl mx-auto py-12 pb-24 sm:py-24 px-6 outline-none"
             >
-              {children}
+              <MotionProvider>{children}</MotionProvider>
             </div>
             <Navbar />
           </TooltipProvider>
