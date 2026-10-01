@@ -19,17 +19,15 @@ export default function NotFound() {
                         moved.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3">
-                        <Link href="/">
-                            <Button variant="outline" className="gap-2 cursor-pointer">
-                                <Home className="h-4 w-4" />
+                        <Button asChild variant="outline" className="gap-2">
+                            <Link href="/">
+                                <Home className="h-4 w-4" aria-hidden />
                                 Go to Home
-                            </Button>
-                        </Link>
+                            </Link>
+                        </Button>
                     </div>
                 </div>
             </div>
         </div>
     );
 }
-
-
