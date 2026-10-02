@@ -74,7 +74,7 @@ function ActivityRow({ activity }: { activity: EducationActivity }) {
           {activity.title}
         </div>
         {activity.description ? (
-          <p className="text-sm text-muted-foreground whitespace-nowrap pt-0.5">
+          <p className="text-sm text-muted-foreground md:whitespace-nowrap pt-0.5">
             {activity.description}
           </p>
         ) : null}
