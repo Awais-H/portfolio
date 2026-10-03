@@ -1,31 +1,31 @@
+// Just the bits of the mdast tree this plugin touches.
+type MdastNode = {
+    type: string;
+    meta?: string | null;
+    data?: { hProperties?: Record<string, unknown> };
+    children?: MdastNode[];
+};
+
+/**
+ * Copies a code fence's meta string (```ts title="foo.ts") onto the rendered
+ * <code> element as data-meta, plus data-title when a title is given.
+ */
 export function remarkCodeMeta() {
-    return (tree: any) => {
-        const walk = (node: any) => {
-            if (!node || typeof node !== "object") return;
+    return (tree: MdastNode) => {
+        const walk = (node: MdastNode) => {
+            if (node.type === "code" && node.meta) {
+                const hProperties = ((node.data ??= {}).hProperties ??= {});
+                hProperties["data-meta"] = node.meta;
 
-            if (node.type === "code") {
-                const meta: string | undefined = node.meta;
-                if (meta) {
-                    node.data ||= {};
-                    node.data.hProperties ||= {};
-
-                    node.data.hProperties["data-meta"] = meta;
-
-                    const titleMatch = meta.match(/title="([^"]+)"/);
-                    if (titleMatch?.[1]) {
-                        node.data.hProperties["data-title"] = titleMatch[1];
-                    }
+                const titleMatch = node.meta.match(/title="([^"]+)"/);
+                if (titleMatch?.[1]) {
+                    hProperties["data-title"] = titleMatch[1];
                 }
             }
 
-            const children = node.children;
-            if (Array.isArray(children)) {
-                for (const child of children) walk(child);
-            }
+            node.children?.forEach(walk);
         };
 
         walk(tree);
     };
 }
-
-
