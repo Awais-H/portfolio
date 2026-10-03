@@ -28,6 +28,11 @@ export const metadata: Metadata = {
     template: `%s | ${DATA.name}`,
   },
   description: DATA.description,
+  alternates: {
+    types: {
+      "application/rss+xml": [{ url: "/rss.xml", title: `Blog | ${DATA.name}` }],
+    },
+  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
