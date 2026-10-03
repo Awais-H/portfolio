@@ -4,18 +4,21 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { paginate, normalizePage } from "@/lib/pagination";
 import { ChevronRight } from "lucide-react";
+import { DATA } from "@/data/resume";
+
+const BLOG_DESCRIPTION = `Posts and write-ups by ${DATA.name}.`;
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "An empty blog starter ready for your own posts.",
+  description: BLOG_DESCRIPTION,
   openGraph: {
     title: "Blog",
-    description: "An empty blog starter ready for your own posts.",
+    description: BLOG_DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
     title: "Blog",
-    description: "An empty blog starter ready for your own posts.",
+    description: BLOG_DESCRIPTION,
   },
 };
 
@@ -47,9 +50,9 @@ export default async function BlogPage({
   return (
     <section id="blog">
       <BlurFade delay={BLUR_FADE_DELAY}>
-        <h1 className="text-2xl font-semibold tracking-tight mb-2">Blog <span className="ml-1 bg-card border border-border rounded-md px-2 py-1 text-muted-foreground text-sm">{sortedPosts.length} posts</span></h1>
+        <h1 className="text-2xl font-semibold tracking-tight mb-2">Blog <span className="ml-1 bg-card border border-border rounded-md px-2 py-1 text-muted-foreground text-sm">{sortedPosts.length} {sortedPosts.length === 1 ? "post" : "posts"}</span></h1>
         <p className="text-sm text-muted-foreground mb-8">
-          Publish your own posts by adding MDX files in <code>content/</code>.
+          {BLOG_DESCRIPTION}
         </p>
       </BlurFade>
 
@@ -131,7 +134,7 @@ export default async function BlogPage({
         <BlurFade delay={BLUR_FADE_DELAY * 2}>
           <div className="flex flex-col items-center justify-center py-12 px-4 border border-border rounded-xl">
             <p className="text-muted-foreground text-center">
-              No posts yet. Create your first article in <code>content/</code>.
+              No posts yet, check back soon.
             </p>
           </div>
         </BlurFade>
