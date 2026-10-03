@@ -27,6 +27,29 @@ async function loadFonts() {
   }
 }
 
+// Satori aborts the whole response mid-stream if an <img> can't be loaded, so
+// fetch the avatar up front and just leave it out when that fails (e.g. the
+// site URL isn't reachable yet).
+async function loadAvatar() {
+  if (!DATA.avatarUrl) return undefined;
+  try {
+    const res = await fetch(new URL(DATA.avatarUrl, DATA.url));
+    const type = res.headers.get("content-type") ?? "";
+    if (!res.ok || !type.startsWith("image/")) return undefined;
+
+    const bytes = new Uint8Array(await res.arrayBuffer());
+    // The content-type comes from the file extension, so a JPEG saved as .png
+    // would be mislabelled and silently dropped by satori. Check the bytes.
+    const isJpeg = bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+    let binary = "";
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+    return `data:${isJpeg ? "image/jpeg" : type};base64,${btoa(binary)}`;
+  } catch (error) {
+    console.error("Failed to load avatar for OG image:", error);
+    return undefined;
+  }
+}
+
 const styles = {
   outerWrapper: {
     height: "100%",
@@ -127,10 +150,7 @@ export async function renderOgImage({
   imageAlt = title,
 }: OgImageOptions) {
   try {
-    const fonts = await loadFonts();
-    const imageUrl = DATA.avatarUrl
-      ? new URL(DATA.avatarUrl, DATA.url).toString()
-      : undefined;
+    const [fonts, imageUrl] = await Promise.all([loadFonts(), loadAvatar()]);
 
     return new ImageResponse(
       (
@@ -139,7 +159,13 @@ export async function renderOgImage({
             <div style={styles.wrapper}>
               {imageUrl && (
                 <div style={styles.imageSection}>
-                  <img src={imageUrl} alt={imageAlt} style={styles.image} />
+                  <img
+                    src={imageUrl}
+                    alt={imageAlt}
+                    width={140}
+                    height={140}
+                    style={styles.image}
+                  />
                 </div>
               )}
               <div style={styles.mainContainer}>
