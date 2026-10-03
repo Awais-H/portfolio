@@ -28,6 +28,8 @@ export const metadata: Metadata = {
     template: `%s | ${DATA.name}`,
   },
   description: DATA.description,
+  authors: [{ name: DATA.name, url: DATA.url }],
+  creator: DATA.name,
   alternates: {
     types: {
       "application/rss+xml": [{ url: "/rss.xml", title: `Blog | ${DATA.name}` }],
@@ -60,7 +62,8 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: `${DATA.name}`,
+    title: DATA.name,
+    description: DATA.description,
     card: "summary_large_image",
   },
 };
