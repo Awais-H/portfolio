@@ -14,10 +14,19 @@ type HackathonLink = {
   icon: ReactNode;
 };
 
+// Set NEXT_PUBLIC_SITE_URL to the custom domain; on Vercel we fall back to the
+// production deployment URL so metadata and OG images never point at a placeholder.
+const siteUrl = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000")
+).replace(/\/+$/, "");
+
 export const DATA = {
   name: "Awais Hashar",
   initials: "AH",
-  url: "https://example.com",
+  url: siteUrl,
   location: "Waterloo, ON",
   locationLink: "https://maps.google.com/?q=Waterloo,+ON",
   description:
