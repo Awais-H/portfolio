@@ -28,13 +28,11 @@ export const DATA = {
   initials: "AH",
   url: siteUrl,
   location: "Waterloo, ON",
-  locationLink: "https://maps.google.com/?q=Waterloo,+ON",
   description:
     "Systems Design Engineering student building AI and full-stack products.",
   summary:
     "I build practical software end-to-end, from ML systems to production-ready web apps.",
   avatarUrl: "/pfp.png",
-  skills: [],
   skillCategories: [
     {
       id: "all",
