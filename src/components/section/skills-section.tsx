@@ -30,13 +30,18 @@ export default function SkillsSection() {
 
   return (
     <div className="flex min-h-0 flex-col gap-y-5">
-      <div className="flex flex-wrap gap-2">
+      <div
+        role="group"
+        aria-label="Filter skills by category"
+        className="flex flex-wrap gap-2"
+      >
         {categories.map((category) => (
           <button
             key={category.id}
             type="button"
+            aria-pressed={category.id === activeCategoryId}
             onClick={() => setActiveCategoryId(category.id)}
-            className={`h-8 px-4 rounded-xl border text-sm transition-colors ${
+            className={`h-8 px-4 rounded-xl border text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
               category.id === activeCategoryId
                 ? "bg-primary text-primary-foreground border-primary"
                 : "bg-background text-muted-foreground border-border hover:text-foreground hover:bg-muted"
