@@ -79,6 +79,11 @@ export default function AsciiBackground({ className }: { className?: string }) {
     let rafId = 0;
     let running = false;
 
+    // Keep the static character field but skip the flicker and cursor light
+    // for people who've asked for less motion.
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let reduceMotion = motionQuery.matches;
+
     const cellColor = (b: number) => {
       const r = Math.round(low[0] + (high[0] - low[0]) * b);
       const g = Math.round(low[1] + (high[1] - low[1]) * b);
@@ -199,7 +204,7 @@ export default function AsciiBackground({ className }: { className?: string }) {
 
     // Cycle a fraction of characters; redraw them with their current brightness.
     const mutationInterval = window.setInterval(() => {
-      if (!activeRef.current) return;
+      if (!activeRef.current || reduceMotion || document.hidden) return;
 
       const mutations = Math.floor(chars.length * MUTATION_RATIO);
       for (let i = 0; i < mutations; i++) {
@@ -276,7 +281,7 @@ export default function AsciiBackground({ className }: { className?: string }) {
     };
 
     const startLoop = () => {
-      if (running) return;
+      if (running || reduceMotion) return;
       running = true;
       rafId = requestAnimationFrame(render);
     };
@@ -292,6 +297,19 @@ export default function AsciiBackground({ className }: { className?: string }) {
     if (activeRef.current) startLoop();
     else stopLoop();
 
+    const handleMotionChange = (event: MediaQueryListEvent) => {
+      reduceMotion = event.matches;
+      if (reduceMotion) {
+        stopLoop();
+        // Clear any cells still lit from the cursor trail.
+        prevLit.forEach((_, index) => drawCell(index, 0));
+        prevLit = new Map();
+      } else if (activeRef.current) {
+        startLoop();
+      }
+    };
+    motionQuery.addEventListener("change", handleMotionChange);
+
     return () => {
       stopLoop();
       startLoopRef.current = null;
@@ -300,6 +318,7 @@ export default function AsciiBackground({ className }: { className?: string }) {
       window.clearTimeout(resizeTimer);
       window.removeEventListener("mousemove", handleMove);
       window.removeEventListener("resize", handleResize);
+      motionQuery.removeEventListener("change", handleMotionChange);
     };
   }, []);
 
