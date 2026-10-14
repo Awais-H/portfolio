@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
-import { allPosts } from "content-collections";
 import { DATA } from "@/data/resume";
+import { getPostSlug, getSortedPosts } from "@/lib/posts";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const posts = allPosts.map((post) => ({
-    url: `${DATA.url}/blog/${post._meta.path.replace(/\.mdx$/, "")}`,
+  const posts = getSortedPosts().map((post) => ({
+    url: `${DATA.url}/blog/${getPostSlug(post)}`,
     lastModified: post.updatedAt ?? post.publishedAt,
   }));
 

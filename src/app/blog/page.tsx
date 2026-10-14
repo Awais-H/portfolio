@@ -1,8 +1,9 @@
 import BlurFade from "@/components/effects/blur-fade";
-import { allPosts } from "content-collections";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { paginate, normalizePage } from "@/lib/pagination";
+import { getPostSlug, getSortedPosts } from "@/lib/posts";
+import { formatDate } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { DATA } from "@/data/resume";
 
@@ -32,13 +33,7 @@ export default async function BlogPage({
 }) {
   const { page: pageParam } = await searchParams;
 
-  const posts = allPosts;
-  const sortedPosts = [...posts].sort((a, b) => {
-    if (new Date(a.publishedAt) > new Date(b.publishedAt)) {
-      return -1;
-    }
-    return 1;
-  });
+  const sortedPosts = getSortedPosts();
 
   const totalPages = Math.ceil(sortedPosts.length / PAGE_SIZE);
   const currentPage = normalizePage(pageParam, totalPages);
@@ -61,7 +56,7 @@ export default async function BlogPage({
           <BlurFade delay={BLUR_FADE_DELAY * 2}>
             <div className="flex flex-col gap-5">
               {paginatedPosts.map((post, id) => {
-                const slug = post._meta.path.replace(/\.mdx$/, "");
+                const slug = getPostSlug(post);
                 const indexNumber = (pagination.page - 1) * PAGE_SIZE + id + 1;
                 return (
                   <BlurFade delay={BLUR_FADE_DELAY * 3 + id * 0.05} key={slug}>
@@ -82,9 +77,12 @@ export default async function BlogPage({
                             />
                           </span>
                         </p>
-                        <p className="text-xs text-muted-foreground">
-                          {post.publishedAt}
-                        </p>
+                        <time
+                          dateTime={post.publishedAt}
+                          className="text-xs text-muted-foreground"
+                        >
+                          {formatDate(post.publishedAt)}
+                        </time>
                       </div>
                     </Link>
                   </BlurFade>
