@@ -57,7 +57,8 @@ export function CodeBlock({ children, ...props }: CodeBlockProps) {
   }, [children]);
 
   const handleCopy = async () => {
-    const code = preRef.current?.textContent || "";
+    // Read from the <code> element so the title bar isn't copied along with it
+    const code = preRef.current?.querySelector("code")?.textContent ?? "";
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
@@ -84,7 +85,7 @@ export function CodeBlock({ children, ...props }: CodeBlockProps) {
           onClick={handleCopy}
           variant="outline"
           size="icon"
-          className={cn("absolute size-8 text-primary cursor-pointer right-3 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity rounded-md border border-border shadow-none", title ? "top-13" : "top-3", props.className)}
+          className={cn("absolute size-8 text-primary cursor-pointer right-3 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 lg:focus-visible:opacity-100 transition-opacity rounded-md border border-border shadow-none", title ? "top-13" : "top-3")}
           aria-label="Copy code"
         >
           {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
@@ -103,8 +104,8 @@ export function CodeBlock({ children, ...props }: CodeBlockProps) {
             {children}
           </div>
         )}
-      </pre >
-    </div >
+      </pre>
+    </div>
   );
 }
 
