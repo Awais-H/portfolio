@@ -48,26 +48,6 @@ export function paginate<T>(
 }
 
 /**
- * Get pagination metadata without slicing the array
- */
-export function getPaginationMeta(
-  totalItems: number,
-  options: PaginationOptions
-) {
-  const { page, pageSize } = options;
-  const totalPages = Math.ceil(totalItems / pageSize);
-
-  return {
-    page,
-    pageSize,
-    totalItems,
-    totalPages,
-    hasNextPage: page < totalPages,
-    hasPreviousPage: page > 1,
-  };
-}
-
-/**
  * Validate and normalize page number
  */
 export function normalizePage(page: number | string | undefined, maxPage: number): number {
